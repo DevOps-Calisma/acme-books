@@ -1,0 +1,16 @@
+{
+    "name": "inventory-management",
+    "version": "1.0.0",
+    "description": "A microservice for managing inventory in the Acme Books application",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "pg": "^8.5.1"
+    },
+    "devDependencies": {},
+    "license": "MIT"
+  }
+  

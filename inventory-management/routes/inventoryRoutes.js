@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { Pool } = require('pg');  // PostgreSQL modülü
-require('dotenv').config();  // .env dosyasını yükle
+const { Pool } = require('pg');
+require('dotenv').config();
 
 const pool = new Pool({
     user: process.env.DB_USER,
@@ -11,52 +11,42 @@ const pool = new Pool({
     port: process.env.DB_PORT
 });
 
-// Envanter öğesi ekleme
 router.post('/add-item', (req, res) => {
     const { item_name, author, price, image_url } = req.body;
-    
     const query = 'INSERT INTO inventory(item_name, author, price, image_url) VALUES($1, $2, $3, $4)';
     const values = [item_name, author, price, image_url];
 
     pool.query(query, values, (err, result) => {
         if (err) {
-            console.error('Error inserting data', err);
-            res.status(500).json({ status: "error", message: "Error adding item" });
+            res.status(500).json({ message: "Error adding item" });
         } else {
-            res.json({ status: "success", message: `Item ${item_name} added successfully!` });
+            res.json({ message: `Item ${item_name} added successfully!` });
         }
     });
 });
 
-// Kitapları listeleme
 router.get('/list-items', (req, res) => {
     const query = 'SELECT * FROM inventory';
-
     pool.query(query, (err, result) => {
         if (err) {
-            console.error('Error fetching data', err);
-            res.status(500).json({ status: "error", message: "Error fetching items" });
+            res.status(500).json({ message: "Error fetching items" });
         } else {
             res.json(result.rows);
         }
     });
 });
 
-// Kitapları silme
 router.delete('/delete-item/:id', (req, res) => {
-    const { id } = req.params;
-
+    const id = req.params.id;
     const query = 'DELETE FROM inventory WHERE id = $1';
 
     pool.query(query, [id], (err, result) => {
         if (err) {
-            console.error('Error deleting item', err);
-            res.status(500).json({ status: "error", message: "Error deleting item" });
+            res.status(500).json({ message: "Error deleting item" });
         } else {
-            res.json({ status: "success", message: `Item with ID ${id} deleted successfully!` });
+            res.json({ message: "Item deleted successfully!" });
         }
     });
 });
-
 
 module.exports = router;
