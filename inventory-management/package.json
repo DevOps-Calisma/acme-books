@@ -4,14 +4,13 @@
     "description": "A microservice for managing inventory in the Acme Books application",
     "main": "app.js",
     "scripts": {
-      "start": "node app.js"
+        "start": "node app.js"
     },
     "dependencies": {
-      "express": "^4.17.1",
-      "pg": "^8.5.1"
+        "dotenv": "^16.4.5",
+        "express": "^4.17.1",
+        "pg": "^8.5.1"
     },
-    "devDependencies": {},
     "author": "Your Name",
     "license": "MIT"
-  }
-  
+}

@@ -30,6 +30,7 @@
                                     <h5 class="card-title">${book.item_name}</h5>
                                     <p class="card-text">Author: ${book.author}</p>
                                     <p class="card-text">Price: $${book.price}</p>
+                                    <button class="btn btn-danger" onclick="deleteBook(${book.id})">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -38,6 +39,19 @@
                 });
             })
             .catch(error => console.error('Error fetching books:', error));
+
+        // Kitabı silme fonksiyonu
+        function deleteBook(id) {
+            fetch(`/inventory/delete-item/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();  // Sayfayı yeniden yükleyerek güncelle
+            })
+            .catch(error => console.error('Error deleting book:', error));
+        }
     </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
