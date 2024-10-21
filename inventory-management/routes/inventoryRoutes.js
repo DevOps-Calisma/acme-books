@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');  // PostgreSQL modülü
+require('dotenv').config();  // .env dosyasını yükle
 
-// PostgreSQL veritabanı bağlantısı
 const pool = new Pool({
-    user: 'postgres',
-    host: '10.251.22.26',  // Veritabanı sunucusunun IP adresi
-    database: 'inventory_db',
-    password: '123456',
-    port: 5432
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT
 });
 
 // Envanter öğesi ekleme
@@ -41,5 +41,22 @@ router.get('/list-items', (req, res) => {
         }
     });
 });
+
+// Kitapları silme
+router.delete('/delete-item/:id', (req, res) => {
+    const { id } = req.params;
+
+    const query = 'DELETE FROM inventory WHERE id = $1';
+
+    pool.query(query, [id], (err, result) => {
+        if (err) {
+            console.error('Error deleting item', err);
+            res.status(500).json({ status: "error", message: "Error deleting item" });
+        } else {
+            res.json({ status: "success", message: `Item with ID ${id} deleted successfully!` });
+        }
+    });
+});
+
 
 module.exports = router;
