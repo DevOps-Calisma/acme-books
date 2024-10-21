@@ -1,0 +1,4 @@
+env/
+myenv/
+/inventory-management/node_modules
+/user-management/node_moduless

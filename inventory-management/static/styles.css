@@ -1,0 +1,39 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+/* Arka planı tüm sayfaya uygula */
+.bg-image {
+    background-image: url('/static/background.jpg');  /* Resim URL'si */
+    height: 100%;  /* Tam yükseklik */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    width: 100%;
+    z-index: -1;  /* İçeriğin arka plan üstüne çıkmasını engellemek için */
+}
+
+/* Form ve başlık görünümü */
+h2 {
+    color: white;
+}
+
+.form-control {
+    margin-bottom: 1rem;
+    border-radius: 10px;
+}
+
+.bg-light {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+button {
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    color: white;
+}
