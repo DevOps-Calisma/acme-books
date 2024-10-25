@@ -19,7 +19,7 @@ app.get('/list-items', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/inventory_list.html'));
 });
 
-const PORT = process.env.PORT || 5002;
+const PORT = process.env.INVENTORY_PORT  || 5002;
 app.listen(PORT, () => {
     console.log(`Inventory management service running on http://10.251.22.26:${PORT}`);
 });

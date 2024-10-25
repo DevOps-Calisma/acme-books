@@ -6,6 +6,14 @@
     <title>Book List</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        /* Kitap resimleri için sınırlama */
+        .card-img-top {
+            max-width: 100%;  /* Genişliği kapsayacak şekilde ayarla */
+            max-height: 300px; /* Yükseklik sınırı */
+            object-fit: contain;  /* Resmi kesmeden küçült ve sığdır */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
