@@ -53,4 +53,21 @@ router.delete('/delete-item/:id', (req, res) => {
     });
 });
 
+// Kitapları silme
+router.delete('/delete-item/:id', (req, res) => {
+    const { id } = req.params;
+
+    const query = 'DELETE FROM inventory WHERE id = $1';
+
+    pool.query(query, [id], (err, result) => {
+        if (err) {
+            console.error('Error deleting item', err);
+            res.status(500).json({ status: "error", message: "Error deleting item" });
+        } else {
+            res.json({ status: "success", message: `Item with ID ${id} deleted successfully!` });
+        }
+    });
+});
+
+
 module.exports = router;

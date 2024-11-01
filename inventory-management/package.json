@@ -4,7 +4,7 @@
     "description": "A microservice for managing inventory in the Acme Books application",
     "main": "app.js",
     "scripts": {
-      "start": "node app.js"
+        "start": "node app.js"
     },
     "dependencies": {
       "express": "^4.17.1",
