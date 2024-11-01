@@ -4,7 +4,7 @@ body, html {
 }
 
 .bg-image {
-    background-image: url('/static/images/background.jpg');
+    background-image: url('/static/images/background_user.jpg');
     height: 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -34,24 +34,4 @@ button {
 button:hover {
     background-color: #0056b3;
     color: white;
-}
-
-.card {
-    height: 400px;  
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;  
-}
-
-.card-img-top {
-    width: 100%;
-    height: 250px; 
-    object-fit: contain;  
-    padding: 10px;  
-    background-color: white;  
-}
-
-.card-body {
-    padding: 10px;
 }

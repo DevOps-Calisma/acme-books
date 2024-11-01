@@ -1,31 +1,21 @@
-// user-management/app.js
 const express = require('express');
 const path = require('path');
 const app = express();
+require('dotenv').config();
 
-// Middleware'ler
-app.use(express.json());  // JSON verilerini işlemek için
-app.use(express.urlencoded({ extended: true }));  // Form verilerini işlemek için
-app.use(express.static('static'));  // Statik dosyalar için
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/static', express.static(path.join(__dirname, '../frontend/static')));
 
-// Ana sayfa (kullanıcı formu)
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'templates', 'user_form.html'));
+const userRoutes = require('./routes/userRoutes');
+app.use('/user', userRoutes);
+
+// Ana sayfa: User login formu
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/pages/user_login.html'));
 });
 
-// API endpoint: Kullanıcı ekleme
-app.post('/add-user', (req, res) => {
-    const { username, email } = req.body;
-
-    // Terminalde kullanıcı bilgilerini yazdır
-    console.log(`New user added: ${username}, Email: ${email}`);
-
-    // İstemciye yanıt gönder
-    res.json({ status: "success", message: `User ${username} added!` });
-});
-
-// Sunucuyu başlat
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.USER_PORT || 5005;
 app.listen(PORT, () => {
-    console.log(`User management service running on http://localhost:${PORT}`);
+    console.log(`User management service running on http://10.251.22.26:${PORT}`);
 });

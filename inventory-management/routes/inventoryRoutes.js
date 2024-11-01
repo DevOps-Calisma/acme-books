@@ -29,12 +29,16 @@ router.get('/list-items', (req, res) => {
     const query = 'SELECT * FROM inventory';
     pool.query(query, (err, result) => {
         if (err) {
+            console.error('Error fetching items from database:', err);
             res.status(500).json({ message: "Error fetching items" });
         } else {
-            res.json(result.rows);
+            console.log('Fetched items from database:', result.rows); // Veritabanından dönen veriyi kontrol et
+            res.json(result.rows); // Dönen veriyi JSON formatında frontend'e ilet
         }
     });
 });
+
+
 
 router.delete('/delete-item/:id', (req, res) => {
     const id = req.params.id;
