@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { Pool } = require('pg');  // PostgreSQL modülü
-require('dotenv').config();  // .env dosyasını yükle
+const { Pool } = require('pg');
+require('dotenv').config();
 
-// PostgreSQL veritabanı bağlantısı
 const pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -12,36 +11,19 @@ const pool = new Pool({
     port: process.env.DB_PORT
 });
 
-// Kullanıcı kaydetme
-router.post('/register', (req, res) => {
-    const { username, email, password } = req.body;
-    
-    const query = 'INSERT INTO users(username, email, password) VALUES($1, $2, $3)';
-    const values = [username, email, password];
+// User login
+router.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    const query = 'SELECT * FROM users WHERE username = $1 AND password = $2';
+    const values = [username, password];
 
     pool.query(query, values, (err, result) => {
         if (err) {
-            console.error('Error registering user', err);
-            res.status(500).json({ status: "error", message: "Error registering user" });
+            res.status(500).json({ message: "Error logging in" });
+        } else if (result.rows.length > 0) {
+            res.json({ message: "Login successful", user: result.rows[0] });
         } else {
-            res.json({ status: "success", message: `User ${username} registered successfully!` });
-        }
-    });
-});
-
-// Kullanıcı giriş işlemi
-router.post('/login', (req, res) => {
-    const { email, password } = req.body;
-
-    const query = 'SELECT * FROM users WHERE email = $1 AND password = $2';
-    const values = [email, password];
-
-    pool.query(query, values, (err, result) => {
-        if (err || result.rows.length === 0) {
-            console.error('Invalid login credentials');
-            res.status(401).json({ status: "error", message: "Invalid email or password" });
-        } else {
-            res.json({ status: "success", message: `Welcome back, ${result.rows[0].username}!` });
+            res.status(401).json({ message: "Invalid credentials" });
         }
     });
 });
