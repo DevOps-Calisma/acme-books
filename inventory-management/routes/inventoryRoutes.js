@@ -32,7 +32,7 @@ router.get('/list-items', (req, res) => {
             console.error('Error fetching items from database:', err);
             res.status(500).json({ message: "Error fetching items" });
         } else {
-            console.log('Fetched items from database:', result.rows); // Veritabanından dönen veriyi kontrol et
+            console.log('Fetched items from database:', result.rows); // Veritabanından dönen veriyi kontrol et! tamam
             res.json(result.rows); // Dönen veriyi JSON formatında frontend'e ilet
         }
     });
