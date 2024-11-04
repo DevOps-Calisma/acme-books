@@ -1,13 +1,13 @@
 {
     "name": "user-management",
     "version": "1.0.0",
-    "description": "User management service",
-    "main": "app.js",
+    "main": "user_management.js",
     "scripts": {
-      "start": "node app.js"
+        "start": "node script.js"
     },
+    "author": "OMER",
+    "license": "MIT",
     "dependencies": {
-      "express": "^4.17.1"
+        "pg": "^8.13.0"
     }
-  }
-  
+}
