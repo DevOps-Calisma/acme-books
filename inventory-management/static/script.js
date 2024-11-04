@@ -21,3 +21,4 @@ document.getElementById("inventoryForm").onsubmit = function(e) {
     })
     .catch(error => console.error('Error:', error));
 };
+

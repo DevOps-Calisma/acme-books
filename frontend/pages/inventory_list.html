@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book List</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        /* Kitap resimleri için sınırlama */
+        .card-img-top {
+            max-width: 100%;  /* Genişliği kapsayacak şekilde ayarla */
+            max-height: 300px; /* Yükseklik sınırı */
+            object-fit: contain;  /* Resmi kesmeden küçült ve sığdır */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -20,6 +28,11 @@
         fetch('/inventory/list-items')
             .then(response => response.json())
             .then(books => {
+                if (!books || books.length === 0) {
+                    document.getElementById('book-list').innerHTML = '<p class="text-center">No books available.</p>';
+                    return;
+                }
+
                 const bookList = document.getElementById('book-list');
                 books.forEach(book => {
                     const bookItem = `
