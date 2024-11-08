@@ -6,68 +6,17 @@
     <title>Book List</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/styles.css">
-    <style>
-        /* Kitap resimleri için sınırlama */
-        .card-img-top {
-            max-width: 100%;  /* Genişliği kapsayacak şekilde ayarla */
-            max-height: 300px; /* Yükseklik sınırı */
-            object-fit: contain;  /* Resmi kesmeden küçült ve sığdır */
-        }
-    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h2 class="text-center mb-4">Available Books</h2>
         <div class="row" id="book-list">
-            <!-- Kitaplar burada listelenecek -->
+            <!-- Books will be displayed here -->
         </div>
     </div>
 
-    <script>
-        // Kitapları API'den al ve sayfada göster
-        fetch('/inventory/list-items')
-            .then(response => response.json())
-            .then(books => {
-                if (!books || books.length === 0) {
-                    document.getElementById('book-list').innerHTML = '<p class="text-center">No books available.</p>';
-                    return;
-                }
-
-                const bookList = document.getElementById('book-list');
-                books.forEach(book => {
-                    const bookItem = `
-                        <div class="col-md-4">
-                            <div class="card mb-4">
-                                <img src="${book.image_url}" class="card-img-top" alt="Book Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">${book.item_name}</h5>
-                                    <p class="card-text">Author: ${book.author}</p>
-                                    <p class="card-text">Price: $${book.price}</p>
-                                    <button class="btn btn-danger" onclick="deleteBook(${book.id})">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    bookList.innerHTML += bookItem;
-                });
-            })
-            .catch(error => console.error('Error fetching books:', error));
-
-        // Kitabı silme fonksiyonu
-        function deleteBook(id) {
-            fetch(`/inventory/delete-item/${id}`, {
-                method: 'DELETE'
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                location.reload();  // Sayfayı yeniden yükleyerek güncelle
-            })
-            .catch(error => console.error('Error deleting book:', error));
-        }
-    </script>
-
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/static/js/inventory.js"></script>
 </body>
 </html>
