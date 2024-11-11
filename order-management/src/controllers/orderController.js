@@ -5,10 +5,13 @@ const axios = require('axios');
 // Helper function to validate user
 // Helper function to validate user
 async function validateUser(userId) {
+
   try {
-    const userResponse = await axios.get(`http://localhost:5004/users/${userId}`);
-    if (userResponse.status === 200) { // Check for 200
-      return true; 
+    console.log(userId + "ss3s");
+    const userResponse = await axios.get(`http://10.251.22.28:5001/users/${userId}`); // Correct port
+
+    if (userResponse.status === 200) { 
+      return true; // Add return here
     } 
   } catch (error) {
     console.error('Error validating user:', error);
@@ -16,17 +19,19 @@ async function validateUser(userId) {
   }
 }
 
-
 exports.createOrder = async (req, res) => {
   try {
-    const { userId, order_id, item_id, quantity } = req.body;
 
+    const { userId, order_id, item_id, quantity } = req.body;
+    
     // 1. Validate the user
     const isUserValid = await validateUser(userId);
     if (!isUserValid) {
+
       return res.status(400).json({ message: 'User not found' });
     }
 
+    
     // 2. User exists, proceed with order creation
     const newOrder = new Order(order_id, userId, item_id, quantity);
     await Order.create(newOrder);
