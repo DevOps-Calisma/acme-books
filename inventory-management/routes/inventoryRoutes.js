@@ -12,9 +12,9 @@ const pool = new Pool({
 });
 
 router.post('/add-item', (req, res) => {
-    const { item_name, author, price, image_url } = req.body;
-    const query = 'INSERT INTO inventory(item_name, author, price, image_url) VALUES($1, $2, $3, $4)';
-    const values = [item_name, author, price, image_url];
+    const { item_name, author, price, image_url, stock } = req.body;
+    const query = 'INSERT INTO inventory(item_name, author, price, image_url, stock) VALUES($1, $2, $3, $4, $5)';
+    const values = [item_name, author, price, image_url, stock];
 
     pool.query(query, values, (err, result) => {
         if (err) {

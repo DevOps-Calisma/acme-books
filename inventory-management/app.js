@@ -21,5 +21,5 @@ app.get('/list-items', (req, res) => {
 
 const PORT = process.env.INVENTORY_PORT  || 5002;
 app.listen(PORT, () => {
-    console.log(`Inventory management service running on http://10.251.22.26:${PORT}`);
+    console.log(`Inventory management service running. port: ${PORT}`);
 });
