@@ -27,12 +27,15 @@ router.post('/signup', (req, res) => {
     const { first_name, last_name, city, phone_number, email, password } = req.body;
     const query = 'INSERT INTO users (first_name, last_name, city, phone_number, email, password) VALUES ($1, $2, $3, $4, $5, $6)';
     const values = [first_name, last_name, city, phone_number, email, password];
+
     pool.query(query, values, (err, result) => {
         if (err) {
+            console.error('Error signing up:', err);  // Hatanın detaylarını loglayın
             return res.status(500).json({ success: false, message: 'Error signing up' });
         }
-        res.json({ success: true, message: 'Signup successful' });
+        res.json({ success: true });
     });
 });
+
 
 module.exports = router;

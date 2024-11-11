@@ -13,17 +13,56 @@ const pool = new Pool({
 
 router.post('/add-item', (req, res) => {
     const { item_name, author, price, image_url, stock } = req.body;
-    const query = 'INSERT INTO inventory(item_name, author, price, image_url, stock) VALUES($1, $2, $3, $4, $5)';
-    const values = [item_name, author, price, image_url, stock];
 
-    pool.query(query, values, (err, result) => {
+    // check if item already exists
+    const checkQuery = `
+        SELECT * FROM inventory 
+        WHERE LOWER(item_name) = LOWER($1) 
+          AND LOWER(author) = LOWER($2) 
+          AND price = $3
+    `;
+    const checkValues = [item_name, author, price];
+
+    pool.query(checkQuery, checkValues, (err, result) => {
         if (err) {
-            res.status(500).json({ message: "Error adding item" });
+            return res.status(500).json({ message: "Error checking item" });
+        }
+
+        if (result.rows.length > 0) {
+            // book exists, update stock
+            const updateQuery = `
+                UPDATE inventory 
+                SET stock = stock + $1 
+                WHERE LOWER(item_name) = LOWER($2) 
+                  AND LOWER(author) = LOWER($3) 
+                  AND price = $4
+            `;
+            const updateValues = [stock, item_name, author, price];
+
+            pool.query(updateQuery, updateValues, (err, updateResult) => {
+                if (err) {
+                    return res.status(500).json({ message: "Error updating stock" });
+                }
+                res.json({ message: `Stock for item ${item_name} updated successfully!` });
+            });
         } else {
-            res.json({ message: `Item ${item_name} added successfully!` });
+            // book does not exist, insert new book
+            const insertQuery = `
+                INSERT INTO inventory(item_name, author, price, image_url, stock) 
+                VALUES($1, $2, $3, $4, $5)
+            `;
+            const insertValues = [item_name, author, price, image_url, stock];
+
+            pool.query(insertQuery, insertValues, (err, insertResult) => {
+                if (err) {
+                    return res.status(500).json({ message: "Error adding item" });
+                }
+                res.json({ message: `Item ${item_name} added successfully!` });
+            });
         }
     });
 });
+
 
 router.get('/list-items', (req, res) => {
     const query = 'SELECT * FROM inventory';
@@ -38,20 +77,6 @@ router.get('/list-items', (req, res) => {
     });
 });
 
-
-
-router.delete('/delete-item/:id', (req, res) => {
-    const id = req.params.id;
-    const query = 'DELETE FROM inventory WHERE id = $1';
-
-    pool.query(query, [id], (err, result) => {
-        if (err) {
-            res.status(500).json({ message: "Error deleting item" });
-        } else {
-            res.json({ message: "Item deleted successfully!" });
-        }
-    });
-});
 
 // Kitapları silme
 router.delete('/delete-item/:id', (req, res) => {
