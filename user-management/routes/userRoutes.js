@@ -11,20 +11,27 @@ const pool = new Pool({
     port: process.env.DB_PORT
 });
 
-// User login
 router.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    const query = 'SELECT * FROM users WHERE username = $1 AND password = $2';
-    const values = [username, password];
+    const { email, password } = req.body;
+    pool.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password], (err, result) => {
+        if (err) return res.status(500).json({ success: false, message: 'Error logging in' });
+        if (result.rows.length > 0) {
+            res.json({ success: true });
+        } else {
+            res.json({ success: false, message: 'Invalid email or password' });
+        }
+    });
+});
 
+router.post('/signup', (req, res) => {
+    const { first_name, last_name, city, phone_number, email, password } = req.body;
+    const query = 'INSERT INTO users (first_name, last_name, city, phone_number, email, password) VALUES ($1, $2, $3, $4, $5, $6)';
+    const values = [first_name, last_name, city, phone_number, email, password];
     pool.query(query, values, (err, result) => {
         if (err) {
-            res.status(500).json({ message: "Error logging in" });
-        } else if (result.rows.length > 0) {
-            res.json({ message: "Login successful", user: result.rows[0] });
-        } else {
-            res.status(401).json({ message: "Invalid credentials" });
+            return res.status(500).json({ success: false, message: 'Error signing up' });
         }
+        res.json({ success: true, message: 'Signup successful' });
     });
 });
 

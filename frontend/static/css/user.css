@@ -1,37 +1,16 @@
-body, html {
-    height: 100%;
-    margin: 0;
+body {
+    background: url('/static/images/background.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 .bg-image {
-    background-image: url('/static/images/background_user.jpg');
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: absolute;
     width: 100%;
+    background-image: url('/static/images/background.jpg');
+    background-size: cover;
+    filter: blur(8px);
     z-index: -1;
-}
-
-h2 {
-    color: white;
-}
-
-.form-control {
-    margin-bottom: 1rem;
-    border-radius: 10px;
-}
-
-.bg-light {
-    background-color: rgba(255, 255, 255, 0.9) !important;
-}
-
-button {
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #0056b3;
-    color: white;
 }

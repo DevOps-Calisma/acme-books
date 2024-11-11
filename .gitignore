@@ -1,4 +1,4 @@
-env/
 /inventory-management/node_modules
-/user-management/node_moduless
+/user-management/node_modules/
 /inventory-management/.env
+/user-management/.env
