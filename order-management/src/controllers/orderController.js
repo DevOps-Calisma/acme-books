@@ -28,9 +28,8 @@ exports.createOrder = async (req, res) => {
     const isUserValid = await validateUser(userId);
     if (!isUserValid) {
 
-      return res.status(400).json({ message: 'User not found' });
-    }
-
+      return res.status(400).json({ message: 'User nottt foundd' });
+    
     
     // 2. User exists, proceed with order creation
     const newOrder = new Order(order_id, userId, item_id, quantity);
