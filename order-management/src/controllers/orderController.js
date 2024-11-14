@@ -8,7 +8,7 @@ async function validateUser(userId) {
 
   try {
     console.log(userId + "ss3s");
-    const userResponse = await axios.get(`http://10.251.22.28:5001/users/${userId}`); // Correct port
+    const userResponse = await axios.get(`http://192.168.1.107:5001/users/${userId}`); // Correct port
 
     if (userResponse.status === 200) { 
       return true; // Add return here
@@ -28,7 +28,7 @@ exports.createOrder = async (req, res) => {
     const isUserValid = await validateUser(userId);
     if (!isUserValid) {
 
-      return res.status(400).json({ message: 'User nottt foundd' });
+      return res.status(400).json({ message: 'User not foundd' });
     
     
     // 2. User exists, proceed with order creation
