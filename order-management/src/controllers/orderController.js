@@ -14,17 +14,6 @@ async function validateUser(userId) {
 }
 
 
-// Helper function to validate user
-async function validateOrder(orderId) {
-  try {
-    const orderResponse = await axios.get(`http://192.168.1.58:5001/orders/${orderId}`);
-    return orderResponse.status === 200;
-  } catch (error) {
-    console.error('Error validating order:', error);
-    return false;
-  }
-}
-
 // Helper function to validate payment
 async function validatePayment(orderId, amount) {
   try {
@@ -49,11 +38,6 @@ exports.createOrder = async (req, res) => {
     return res.status(404).json({ message: 'User not found' });
   }
 
-   // 1. ORder dogrulamasi
-   const isOrderValid = await validateUser(userId);
-   if (!isOrderValid) {
-     return res.status(404).json({ message: 'Order not found' });
-   }
 
   // 2. Ödeme doğrulaması
   const isPaymentSuccessful = await validatePayment(order_id, amount);
