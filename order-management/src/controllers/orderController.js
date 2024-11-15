@@ -5,10 +5,22 @@ const axios = require('axios');
 // Helper function to validate user
 async function validateUser(userId) {
   try {
-    const userResponse = await axios.get(`http://192.168.1.107:5001/users/${userId}`);
+    const userResponse = await axios.get(`http://192.168.1.58:5001/users/${userId}`);
     return userResponse.status === 200;
   } catch (error) {
     console.error('Error validating user:', error);
+    return false;
+  }
+}
+
+
+// Helper function to validate user
+async function validateOrder(orderId) {
+  try {
+    const orderResponse = await axios.get(`http://192.168.1.58:5001/orders/${orderId}`);
+    return orderResponse.status === 200;
+  } catch (error) {
+    console.error('Error validating order:', error);
     return false;
   }
 }
@@ -19,7 +31,7 @@ async function validatePayment(orderId, amount) {
     const paymentResponse = await axios.post('http://localhost:5003/payment/process-payment', {
       orderId,
       amount
-    });
+    }); 
     return paymentResponse.status === 201;
   } catch (error) {
     console.error('Error processing payment:', error);
@@ -34,13 +46,19 @@ exports.createOrder = async (req, res) => {
   // 1. Kullanıcı doğrulaması
   const isUserValid = await validateUser(userId);
   if (!isUserValid) {
-    return res.status(400).json({ message: 'User not found' });
+    return res.status(404).json({ message: 'User not found' });
   }
+
+   // 1. ORder dogrulamasi
+   const isOrderValid = await validateUser(userId);
+   if (!isOrderValid) {
+     return res.status(404).json({ message: 'Order not found' });
+   }
 
   // 2. Ödeme doğrulaması
   const isPaymentSuccessful = await validatePayment(order_id, amount);
   if (!isPaymentSuccessful) {
-    return res.status(400).json({ message: 'Payment failed' });
+    return res.status(404).json({ message: 'Payment failed' });
   }
 
   // 3. Sipariş oluşturma
