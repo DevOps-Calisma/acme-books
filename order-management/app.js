@@ -16,5 +16,5 @@ app.use('/api', orderRoutes);
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Order Management Service running on http://localhost:${PORT}`);
+  console.log(`Order Management Service running on ${PORT}`);
 });
