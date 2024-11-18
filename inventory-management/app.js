@@ -3,6 +3,18 @@ const path = require('path');
 const app = express();
 require('dotenv').config();
 
+
+function isAdmin(req, res, next) {
+    const isAdminUser = req.headers['is-admin'] === 'true'; // Example: Check for a header 
+
+    if (isAdminUser) {
+        next(); // User is admin, proceed to the route
+    } else {
+        res.status(403).json({ message: "Unauthorized: Admin access required." });
+    }
+}
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/static', express.static(path.join(__dirname, '../frontend/static')));
