@@ -1,0 +1,59 @@
+services:
+  eureka-server:
+    image: ygqygq2/eureka-server:latest # Assuming you are using a pre-built Eureka server image
+    ports:
+      - "8761:8761"
+    networks:
+      - acme
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "5004:5004"
+    environment:
+      - PORT=5004
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://10.251.22.28:8761/eureka # Point to Eureka server
+    depends_on:
+      - eureka-server
+    networks:
+      - acme
+
+
+  inventory-service:
+    build: ./inventory-service
+    ports:
+      - "5005:5002"
+    environment:
+      - INVENTORY_PORT=5002
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://10.251.22.28:8761/eureka
+    depends_on:
+      - eureka-server
+    networks:
+      - acme
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "5003:5003"
+    environment:
+      - USER_PORT=5003
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://10.251.22.28:8761/eureka
+      # Add other database environment variables
+    depends_on:
+      - eureka-server
+    networks:
+      - acme
+
+
+  api-gateway:
+    build: ./api-gateway # Path to your Spring Cloud Gateway project
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    networks:
+      - acme
+
+
+networks:
+  acme:
