@@ -19,13 +19,5 @@ curl -X POST \
 
 **Add new order:**
 
-curl -X POST \
-  http://localhost:5004/api/create-order \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "userId": xxxx, 
-    "order_id": "xxxx",
-    "item_id": xxxx, 
-    "stock": xxxx
-  }'
+curl -X POST -H 'Content-Type: application/json' -d '{"userId": 1, "order_id": "order123", "item_id": 14, "stock": 2}'  http://10.251.22.28:5004/api/create-order 
   
