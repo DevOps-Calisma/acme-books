@@ -19,11 +19,10 @@ services:
 
   inventory-service:
     build: ./inventory-service
+    env_file:
+      - ./inventory-service/.env
     ports:
-      - "5002:5002"
-    environment:
-      - INVENTORY_PORT=5002
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://10.251.22.28:8761/eureka
+      - "${INVENTORY_PORT:-5002}:${INVENTORY_PORT:-5002}"
     depends_on:
       - eureka-server
     networks:
@@ -31,11 +30,10 @@ services:
 
   user-service:
     build: ./user-service
+    env_file:
+      - ./user-service/.env
     ports:
-      - "5003:5003"
-    environment:
-      - USER_PORT=5003
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://10.251.22.28:8761/eureka
+      - "${USER_PORT:-5003}:${USER_PORT:-5003}"
     depends_on:
       - eureka-server
     networks:
