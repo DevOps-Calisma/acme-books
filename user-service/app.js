@@ -6,15 +6,11 @@ const Eureka = require('eureka-js-client').Eureka;
 
 const app = express();
 
-// Middleware to parse JSON and URL-encoded request bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the frontend
 app.use('/static', express.static(path.join(__dirname, '../frontend/static')));
 
-
-// PostgreSQL Connection Pool Setup
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -23,11 +19,9 @@ const pool = new Pool({
   port: process.env.DB_PORT
 });
 
-// User Routes (using PostgreSQL)
 app.post('/add-user', async (req, res) => {
     const { first_name, email } = req.body;
 
-    // Basic validation
     if (!first_name || !email) {
         return res.status(400).json({ error: 'Username and email are required.' });
     }
@@ -37,11 +31,11 @@ app.post('/add-user', async (req, res) => {
         const values = [first_name, email];
         const result = await pool.query(query, values);
 
-        const userId = result.rows[0].id; // Get the generated user ID
+        const userId = result.rows[0].id;
         res.json({ message: 'User added successfully!', userId });
     } catch (error) {
         console.error("Error adding user", error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error (probably db connection error)' });
     }
 });
 
@@ -76,7 +70,6 @@ app.get('/users', async (req, res) => {
     }
 });
 
-// Frontend Routes
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/user_login.html'));
 });
@@ -85,20 +78,16 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/user_signup.html'));
 });
 
-// Start the server
 const PORT = process.env.USER_PORT || 5003;
 app.listen(PORT, () => {
     console.log(`User management service running on port: ${PORT}`);
 });
 
-
-
-
 const client = new Eureka({
     instance: {
       app: 'user-service',
-      hostName: '10.251.22.28', // Replace with your service's hostname/IP if not running locally
-      ipAddr: '10.251.22.28', // Replace with your service's IP
+      hostName: process.env.HOSTNAME,
+      ipAddr: process.env.HOSTNAME,
       port: {
         '$': PORT,
         '@enabled': 'true',
@@ -110,12 +99,12 @@ const client = new Eureka({
       },
     },
     eureka: {
-      host: '10.251.22.28', // Replace with your Eureka server's host
-      port: 8761, // Replace with your Eureka server's port
+      host: process.env.EUREKA_SERVER_HOST,
+      port: parseInt(process.env.EUREKA_SERVER_PORT),
       registerWithEureka: true,
       fetchRegistry: false
     },
   });
-  
-  client.start();
-  module.exports = client;
+
+client.start();
+module.exports = client;

@@ -30,12 +30,11 @@ router.post('/signup', (req, res) => {
 
     pool.query(query, values, (err, result) => {
         if (err) {
-            console.error('Error signing up:', err);  // Hatanın detaylarını loglayın
+            console.error('Error signing up:', err);
             return res.status(500).json({ success: false, message: 'Error signing up' });
         }
         res.json({ success: true });
     });
 });
-
 
 module.exports = router;
