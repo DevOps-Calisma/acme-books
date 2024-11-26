@@ -1,13 +1,17 @@
-// src/controllers/orderController.js
+require('dotenv').config(); // .env dosyasını yükler
 const Order = require('../models/Order');
 const axios = require('axios');
+
+// Environment değişkenlerini yükle
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL; // Kullanıcı servisi URL'si
+const INVENTORY_SERVICE_URL = process.env.INVENTORY_SERVICE_URL; // Envanter servisi URL'si
 
 // Helper function to validate user
 async function validateUser(userId) {
     try {
-        const userResponse = await axios.get(`http://10.251.22.28:5003/users/${userId}`); // Correct port
+        const userResponse = await axios.get(`${USER_SERVICE_URL}/users/${userId}`); // Hardcoded URL yerine env değişkeni kullanıldı
         if (userResponse.status === 200) {
-            return true; // Add return here
+            return true;
         }
     } catch (error) {
         console.error('Error validating user:', error);
@@ -19,7 +23,7 @@ async function validateUser(userId) {
 async function validateAndUpdateInventory(itemId, requestedStock) {
     try {
         // Fetch inventory item details
-        const inventoryResponse = await axios.get(`http://10.251.22.28:5002/inventory/list-items`); // Assuming you have an endpoint to fetch all items
+        const inventoryResponse = await axios.get(`${INVENTORY_SERVICE_URL}/inventory/list-items`); // Hardcoded URL yerine env değişkeni kullanıldı
         const items = inventoryResponse.data;
         const item = items.find(i => i.id === parseInt(itemId)); // Assuming item IDs are integers
 

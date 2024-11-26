@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
@@ -6,13 +7,15 @@ const orderRoutes = require('./src/routes/orderRoutes');
 const Eureka = require('eureka-js-client').Eureka;
 
 const app = express();
-const PORT = process.env.PORT || 5004;
+const PORT = process.env.PORT; 
+const EUREKA_SERVER_URL = process.env.EUREKA_SERVER_URL; 
+const HOSTNAME = process.env.HOSTNAME; 
 
 const client = new Eureka({
   instance: {
     app: 'order-service',
-    hostName: '10.251.22.28', // Replace with your service's hostname/IP if not running locally
-    ipAddr: '10.251.22.28', // Replace with your service's IP
+    hostName: HOSTNAME, 
+    ipAddr: HOSTNAME, 
     port: {
       '$': PORT,
       '@enabled': 'true',
@@ -24,10 +27,10 @@ const client = new Eureka({
     },
   },
   eureka: {
-    host: 'eureka-server', // Replace with your Eureka server's host
-    port: 8761, // Replace with your Eureka server's port
+    host: new URL(EUREKA_SERVER_URL).hostname, 
+    port: parseInt(new URL(EUREKA_SERVER_URL).port), 
     registerWithEureka: true,
-    fetchRegistry: true
+    fetchRegistry: true,
   },
 });
 
@@ -39,7 +42,6 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api', orderRoutes);
-
 
 // Start the server
 app.listen(PORT, () => {
