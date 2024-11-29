@@ -8,6 +8,7 @@
     "author": "OMER",
     "license": "MIT",
     "dependencies": {
+        "dotenv": "^16.4.5",
         "axios": "^1.7.7",
         "cors": "^2.8.5",
         "eureka-js-client": "^4.5.0",
