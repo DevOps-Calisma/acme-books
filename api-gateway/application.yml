@@ -10,9 +10,9 @@ spring:
     eureka:
       client:
         serviceUrl:
-          defaultZone: http://eureka-server:8761/eureka  # Assuming your Eureka server is named 'eureka-server' in Docker Compose
+          defaultZone: http://10.251.22.28:8761  # Assuming your Eureka server is named 'eureka-server' in Docker Compose
         registerWithEureka: false
-        fetchRegistry: false
+        fetchRegistry: true
 
 server:
   port: 8080
