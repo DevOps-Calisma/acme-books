@@ -29,6 +29,7 @@ const client = new Eureka({
   eureka: {
     host: new URL(EUREKA_SERVER_URL).hostname, 
     port: parseInt(new URL(EUREKA_SERVER_URL).port), 
+    servicePath: '/eureka/apps', // ekledim olmazsa sil !!!
     registerWithEureka: true,
     fetchRegistry: true,
   },
