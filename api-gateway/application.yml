@@ -7,12 +7,15 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-    eureka:
-      client:
-        serviceUrl:
-          defaultZone: http://10.251.22.28:8761  # Assuming your Eureka server is named 'eureka-server' in Docker Compose
-        registerWithEureka: false
-        fetchRegistry: true
+  server:
+    port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.251.22.28:8761  # Assuming your Eureka server is named 'eureka-server' in Docker Compose
+    registerWithEureka: false
+    fetchRegistry: true
 
 server:
   port: 8080
