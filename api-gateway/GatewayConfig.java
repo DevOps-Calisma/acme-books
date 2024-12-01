@@ -1,11 +1,25 @@
+package com.javainuse;
+
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 @Configuration
 public class GatewayConfig {
+        @SpringBootApplication
+        
+        @EnableEurekaServer
+        public class EurekaDiscoveryApplication {
 
+	public static void main(String[] args) {
+		SpringApplication.run(EurekaDiscoveryApplication.class, args);
+	}
+
+}
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
@@ -19,3 +33,5 @@ public class GatewayConfig {
                 .build();
     }
 }
+
+
