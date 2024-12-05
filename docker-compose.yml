@@ -5,6 +5,12 @@ services:
       - "8761:8761"
     networks:
       - acme
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://10.251.22.28:8761/eureka/apps || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   order-service:
     build: ./order-service
@@ -13,7 +19,8 @@ services:
     ports:
       - "${PORT:-5004}:${PORT:-5004}"
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_healthy
     networks:
       - acme
 
@@ -24,7 +31,8 @@ services:
     ports:
       - "${INVENTORY_PORT:-5002}:${INVENTORY_PORT:-5002}"
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_healthy
     networks:
       - acme
 
@@ -35,18 +43,11 @@ services:
     ports:
       - "${USER_PORT:-5003}:${USER_PORT:-5003}"
     depends_on:
-      - eureka-server
-    networks:
-      - acme
-
-  api-gateway:
-    build: ./api-gateway
-    ports:
-      - "8080:8080"
-    depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_healthy
     networks:
       - acme
 
 networks:
   acme:
+    external: true
