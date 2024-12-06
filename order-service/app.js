@@ -15,7 +15,8 @@ const client = new Eureka({
   instance: {
     app: 'order-service',
     hostName: HOSTNAME, 
-    ipAddr: HOSTNAME, 
+      ipAddr: `${HOSTNAME}:${PORT}`, 
+      preferIpAdress: true,
     port: {
       '$': PORT,
       '@enabled': 'true',
