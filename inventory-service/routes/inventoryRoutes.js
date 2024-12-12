@@ -11,22 +11,19 @@ const pool = new Pool({
     port: process.env.DB_PORT
 });
 
-
 function isAdmin(req, res, next) {
-    const isAdminUser = req.headers['is-admin'] === 'true'; // Example: Check for a header 
+    const isAdminUser = req.headers['is-admin'] === 'true';
 
     if (isAdminUser) {
-        next(); // User is admin, proceed to the route
+        next();
     } else {
         res.status(403).json({ message: "Unauthorized: Admin access required." });
     }
 }
 
-
 router.post('/add-item', isAdmin, (req, res) => {
     const { item_name, author, price, image_url, stock } = req.body;
 
-    // check if item already exists
     const checkQuery = `
         SELECT * FROM inventory 
         WHERE LOWER(item_name) = LOWER($1) 
@@ -41,7 +38,6 @@ router.post('/add-item', isAdmin, (req, res) => {
         }
 
         if (result.rows.length > 0) {
-            // book exists, update stock
             const updateQuery = `
                 UPDATE inventory 
                 SET stock = stock + $1 
@@ -58,7 +54,6 @@ router.post('/add-item', isAdmin, (req, res) => {
                 res.json({ message: `Stock for item ${item_name} updated successfully!` });
             });
         } else {
-            // book does not exist, insert new book
             const insertQuery = `
                 INSERT INTO inventory(item_name, author, price, image_url, stock) 
                 VALUES($1, $2, $3, $4, $5)
@@ -75,22 +70,17 @@ router.post('/add-item', isAdmin, (req, res) => {
     });
 });
 
-
 router.get('/list-items', (req, res) => {
     const query = 'SELECT * FROM inventory';
     pool.query(query, (err, result) => {
         if (err) {
-            console.error('Error fetching items from database:', err);
             res.status(500).json({ message: "Error fetching items" });
         } else {
-            console.log('Fetched items from database:', result.rows); // Veritabanından dönen veriyi kontrol et
-            res.json(result.rows); // Dönen veriyi JSON formatında frontend'e ilet
+            res.json(result.rows);
         }
     });
 });
 
-
-// Kitapları silme
 router.delete('/delete-item/:id', (req, res) => {
     const { id } = req.params;
 
@@ -98,7 +88,6 @@ router.delete('/delete-item/:id', (req, res) => {
 
     pool.query(query, [id], (err, result) => {
         if (err) {
-            console.error('Error deleting item', err);
             res.status(500).json({ status: "error", message: "Error deleting item" });
         } else {
             res.json({ status: "success", message: `Item with ID ${id} deleted successfully!` });
@@ -106,12 +95,10 @@ router.delete('/delete-item/:id', (req, res) => {
     });
 });
 
-
-router.put('/update-stock/:id', isAdmin, (req, res) => { // You might want to remove isAdmin if users can reduce stock by ordering
+router.put('/update-stock/:id', isAdmin, (req, res) => {
     const itemId = req.params.id;
     const { stockChange } = req.body;
 
-    // Validate stockChange is a number
     if (typeof stockChange !== 'number') {
         return res.status(400).json({ message: "Invalid stock change value" });
     }
