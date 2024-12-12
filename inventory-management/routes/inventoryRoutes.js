@@ -11,7 +11,19 @@ const pool = new Pool({
     port: process.env.DB_PORT
 });
 
-router.post('/add-item', (req, res) => {
+
+function isAdmin(req, res, next) {
+    const isAdminUser = req.headers['is-admin'] === 'true'; // Example: Check for a header 
+
+    if (isAdminUser) {
+        next(); // User is admin, proceed to the route
+    } else {
+        res.status(403).json({ message: "Unauthorized: Admin access required." });
+    }
+}
+
+
+router.post('/add-item', isAdmin, (req, res) => {
     const { item_name, author, price, image_url, stock } = req.body;
 
     // check if item already exists
@@ -94,5 +106,32 @@ router.delete('/delete-item/:id', (req, res) => {
     });
 });
 
+
+router.put('/update-stock/:id', isAdmin, (req, res) => { // You might want to remove isAdmin if users can reduce stock by ordering
+    const itemId = req.params.id;
+    const { stockChange } = req.body;
+
+    // Validate stockChange is a number
+    if (typeof stockChange !== 'number') {
+        return res.status(400).json({ message: "Invalid stock change value" });
+    }
+
+    const query = `
+        UPDATE inventory
+        SET stock = stock + $1
+        WHERE id = $2
+        RETURNING *
+    `;
+
+    pool.query(query, [stockChange, itemId], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: "Error updating stock" });
+        }
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "Item not found" });
+        }
+        res.json({ message: `Stock for item ID ${itemId} updated successfully!`, updatedItem: result.rows[0] });
+    });
+});
 
 module.exports = router;
