@@ -1,0 +1,19 @@
+{
+    "name": "inventory-management",
+    "version": "1.0.0",
+    "description": "A microservice for managing inventory in the Acme Books application",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "dotenv": "^10.0.0",
+<<<<<<< HEAD:inventory-management/package.json
+=======
+        "eureka-js-client": "^4.5.0",
+>>>>>>> aeb3de2 (uploads eureka and api gateway):inventory-service/package.json
+        "express": "^4.21.1",
+        "pg": "^8.5.1"
+    },
+    "license": "MIT"
+}

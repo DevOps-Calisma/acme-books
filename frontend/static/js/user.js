@@ -40,4 +40,8 @@ $(document).ready(function () {
             alert('Server error. Please try again later.');
         });
     });
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> aeb3de2 (uploads eureka and api gateway)

@@ -1,0 +1,17 @@
+{
+    "name": "payment-service",
+    "version": "1.0.0",
+    "description": "A microservice for handling payments in the Acme Books application",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "author": "OMER",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^1.7.7",
+        "eureka-js-client": "^4.5.0",
+        "dotenv": "^10.0.0",
+        "express": "^4.21.1"
+    }
+}

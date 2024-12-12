@@ -1,0 +1,52 @@
+services:
+  eureka-server:
+    image: ygqygq2/eureka-server:latest
+    ports:
+      - "8761:8761"
+    networks:
+      - acme
+
+  order-service:
+    build: ./order-service
+    env_file:
+      - ./order-service/.env
+    ports:
+      - "${PORT:-5004}:${PORT:-5004}"
+    depends_on:
+      - eureka-server
+    networks:
+      - acme
+
+  inventory-service:
+    build: ./inventory-service
+    env_file:
+      - ./inventory-service/.env
+    ports:
+      - "${INVENTORY_PORT:-5002}:${INVENTORY_PORT:-5002}"
+    depends_on:
+      - eureka-server
+    networks:
+      - acme
+
+  user-service:
+    build: ./user-service
+    env_file:
+      - ./user-service/.env
+    ports:
+      - "${USER_PORT:-5003}:${USER_PORT:-5003}"
+    depends_on:
+      - eureka-server
+    networks:
+      - acme
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    networks:
+      - acme
+
+networks:
+  acme:
