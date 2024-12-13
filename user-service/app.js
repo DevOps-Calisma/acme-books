@@ -27,15 +27,19 @@ app.post('/add-user', async (req, res) => {
     }
 
     try {
+        console.log("1");
         const query = 'INSERT INTO users (first_name, email) VALUES ($1, $2) RETURNING id';
+        console.log("2");
         const values = [first_name, email];
+        console.log("3");
         const result = await pool.query(query, values);
+        console.log("4");
 
         const userId = result.rows[0].id;
         res.json({ message: 'User added successfully!', userId });
     } catch (error) {
         console.error("Error adding user", error);
-        res.status(500).json({ error: 'Internal server error (probably db connection error)' });
+        res.status(500).json({ error: 'Internal server error (probably dbbb connection error)' });
     }
 });
 
